@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use \Illuminate\Support\Facades\DB;
 
 class DemoClientSeeder extends Seeder
 {
@@ -11,9 +12,12 @@ class DemoClientSeeder extends Seeder
      */
     public function run()
     {
-        \Illuminate\Support\Facades\DB::table('clients')->insert([
-            'id' => '123456789',
-            'password' => bcrypt('secret'),
-        ]);
+
+        if (!DB::table('clients')->where('id', '123456789')) {
+            DB::table('clients')->insert([
+                'id' => '123456789',
+                'password' => bcrypt('secret'),
+            ]);
+        }
     }
 }

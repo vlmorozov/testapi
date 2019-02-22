@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Exceptions\ExceptionBadRequest;
 use App\Exceptions\ExceptionUnauthorized;
+use App\Models\Clients;
 use App\Models\ClientToken;
 use App\Models\Products;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
 
 class ReservationController extends Controller
 {
@@ -43,16 +46,16 @@ class ReservationController extends Controller
                     throw new ExceptionBadRequest;
                 }
 
-                $productInStock = Products::query()
-                    ->where('id', $product['product_id'])
-                    ->first();
+
+                $productInStock = Products::where('id', $product['product_id'])->first();
+
                 if ($productInStock) {
                     if ($productInStock->quantity < intval($product['quantity'])) {
                         $allProductsInStock = false;
                     }
                     $stock[] = [
-                        'product_id' => $product->id,
-                        'insctock_size' => $product->quantity
+                        'product_id' => $productInStock->id,
+                        'insctock_size' => $productInStock->quantity
                     ];
                 }
             }
@@ -71,12 +74,9 @@ class ReservationController extends Controller
                 ], 400);
             }
         } catch (\Exception $e) {
-            throw new ExceptionBadRequest;
         }
 
-        return response()->json([
-            'data' => 'success'
-        ]);
+        throw new ExceptionBadRequest;
     }
 
 

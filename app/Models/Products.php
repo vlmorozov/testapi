@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Products extends Model
 {
-    protected $table = 'product';
+    protected $table = 'products';
 
     /**
      * The attributes that are mass assignable.
@@ -14,6 +14,6 @@ class Products extends Model
      * @var array
      */
     protected $fillable = [
-        'quantity'
+        'id', 'quantity'
     ];
 }
