@@ -13,7 +13,7 @@ class DemoClientSeeder extends Seeder
     public function run()
     {
 
-        if (!DB::table('clients')->where('id', '123456789')) {
+        if (!DB::table('clients')->where('id', '123456789')->first()) {
             DB::table('clients')->insert([
                 'id' => '123456789',
                 'password' => bcrypt('secret'),

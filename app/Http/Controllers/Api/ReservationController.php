@@ -24,15 +24,23 @@ class ReservationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'token' => 'required',
-            'data' => 'required'
+//            'data' => 'required'
         ]);
 
         if ($validator->fails()) {
             throw new ExceptionBadRequest;
         }
 
+        $checkToken = ClientToken::query()
+            ->where('token', $request->input('token'))
+            ->where('expired_at', '>', Carbon::now())
+            ->first();
+        if (!$checkToken) {
+            throw new ExceptionUnauthorized();
+        }
+
         try {
-            $data = \GuzzleHttp\json_decode($request->input('data'), true);
+            $data = $request->input('data');
 
             $allProductsInStock = true;
             $stock = [];
@@ -43,7 +51,7 @@ class ReservationController extends Controller
                 ]);
 
                 if ($productValidator->fails()) {
-                    throw new ExceptionBadRequest;
+                    throw new ExceptionBadRequest(__LINE__);
                 }
 
 
@@ -76,7 +84,7 @@ class ReservationController extends Controller
         } catch (\Exception $e) {
         }
 
-        throw new ExceptionBadRequest;
+        throw new ExceptionBadRequest(__LINE__);
     }
 
 

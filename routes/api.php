@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::any('/oauth/token', 'Api\AuthController@index');
-Route::get('/reservation', 'Api\ReservationController@index');
+Route::any('/reservation', 'Api\ReservationController@index');
